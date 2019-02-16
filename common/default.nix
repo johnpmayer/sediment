@@ -1,5 +1,5 @@
-with (import <nixpkgs>{});
 
+with (import <nixpkgs>{});
 with lib.sources;
 
 let
@@ -18,5 +18,4 @@ in stdenv.mkDerivation {
     echo "Using files: $files"
     scalac -d $out $files
   '';
-  system = builtins.currentSystem;
 }

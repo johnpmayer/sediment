@@ -26,7 +26,6 @@ in stdenv.mkDerivation {
     export CACHE="$out/coursier-cache"
     export CLASSPATH="$out/classpath"
     mkdir -p $CACHE
-    # coursier resolve --cache $CACHE --tree ${coursierArgs}
     coursier fetch --cache $CACHE ${coursierArgs} --classpath > $CLASSPATH
     cat $CLASSPATH
   '';

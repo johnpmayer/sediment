@@ -4,6 +4,8 @@ with lib.sources;
 
 let
 
+  coursier-jars = import ../3rdparty/coursier;
+
   scalaFiles = sourceFilesBySuffices ./src/main/scala [".scala"];
 
 in stdenv.mkDerivation {
@@ -11,11 +13,16 @@ in stdenv.mkDerivation {
   srcs = scalaFiles;
   buildInputs = [ coreutils findutils scala_2_11 ];
   buildCommand = ''
-    echo "Using path: $PATH"
+    CLASSPATH=$(cat ${coursier-jars}/classpath)
+    
+    echo -n "Coursier classpath: $CLASSPATH"
 
     mkdir $out
     files=$(find $srcs -type f)
     echo "Using files: $files"
-    scalac -d $out $files
+    
+    set -x
+    scalac -classpath $CLASSPATH -d $out $files
+    set +x
   '';
 }

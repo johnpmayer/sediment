@@ -31,12 +31,13 @@ in rec {
   run-script = pkgs.writeTextFile { 
     name = "sediment-common-bin";
     text = ''
+      PATH=${scala_2_11}/bin:${coreutils}/bin
       DEPS_CLASSPATH=$(cat ${coursier-jars}/classpath)
       LIB_CLASSPATH=${library}
       FULL_CLASSPATH="$DEPS_CLASSPATH:$LIB_CLASSPATH"
       echo "Running with $FULL_CLASSPATH"
       set -x
-      scala -cp $FULL_CLASSPATH ${main-class} -- $@
+      scala -cp $FULL_CLASSPATH ${main-class} $@
       set +x
     '';
     executable = true;

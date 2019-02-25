@@ -9,10 +9,8 @@ stdenv.mkDerivation {
   buildInputs = [
     # General tooling
     git
-    # Scala
-    scala_2_11
-    coursier
     # Project-specific
     python27Packages.worldengine
+    feh # really simple image viewer, good enough for now
   ];  
 }

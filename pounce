@@ -3,8 +3,9 @@
 # Build Command #
 
 function do-build {
-  local target=$1
-  build_output=$(nix-build --fallback --no-out-link $target)
+  local nix_file=$1
+  local nix_variable=$2
+  build_output=$(nix-build --fallback --no-out-link $target -A $nix_variable)
   build_status=$?
   if [ $build_status -eq 0 ]
   then
@@ -28,20 +29,19 @@ case $opcode in
 build)
   echo "Building"
   target=$1
-  echo "Building '$target'"
-  store_file=$(do-build $target)
+  shift
+  echo "Building '$target' library"
+  store_file=$(do-build $target library)
   echo "Built target in '$store_file'"
   ;;
 
 run)
   echo "Building"
   target=$1
-  main=$2
-  echo "Building '$target'"
-  store_file=$(do-build $target)
-  echo "Built target in '$store_file'"
-  echo "Running class '$main' in '$target'"
-  scala -cp $store_file "$main"
+  shift
+  echo "Building '$target' run-script"
+  store_file=$(do-build $target run-script)
+  $store_file/bin/run $@
   ;; 
 
 *)

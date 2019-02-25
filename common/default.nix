@@ -9,7 +9,7 @@ let
   main-class = "sediment.common.WorldLoader";
 
 in rec {
-  my-lib = stdenv.mkDerivation {
+  library = stdenv.mkDerivation {
     name = "sediment-common-lib";
     srcs = scalaFiles;
     buildInputs = [ coreutils findutils scala_2_11 ];
@@ -28,14 +28,16 @@ in rec {
     '';
   };
 
-  my-bin = pkgs.writeTextFile { 
+  run-script = pkgs.writeTextFile { 
     name = "sediment-common-bin";
     text = ''
       DEPS_CLASSPATH=$(cat ${coursier-jars}/classpath)
-      LIB_CLASSPATH=${my-lib}
+      LIB_CLASSPATH=${library}
       FULL_CLASSPATH="$DEPS_CLASSPATH:$LIB_CLASSPATH"
       echo "Running with $FULL_CLASSPATH"
-      scala -cp $FULL_CLASSPATH ${main-class}
+      set -x
+      scala -cp $FULL_CLASSPATH ${main-class} -- $@
+      set +x
     '';
     executable = true;
     destination = "/bin/run";

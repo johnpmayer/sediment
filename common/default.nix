@@ -1,6 +1,7 @@
 
 with (import <nixpkgs>{});
 with lib.sources;
+with import ../project/pounce;
 
 let
 
@@ -9,38 +10,14 @@ let
   main-class = "sediment.common.WorldLoader";
 
 in rec {
-  library = stdenv.mkDerivation {
+  library = scalaLibrary {
     name = "sediment-common-lib";
-    srcs = scalaFiles;
-    buildInputs = [ coreutils findutils scala_2_11 ];
-    buildCommand = ''
-      CLASSPATH=$(cat ${coursier-jars}/classpath)
-      
-      echo -n "Coursier classpath: $CLASSPATH"
-
-      mkdir $out
-      files=$(find $srcs -type f)
-      echo "Using files: $files"
-      
-      set -x
-      scalac -classpath $CLASSPATH -d $out $files
-      set +x
-    '';
+    scalaRoot = ./src/main/scala;
   };
 
-  run-script = pkgs.writeTextFile { 
+  run-script = scalaRunner {
     name = "sediment-common-bin";
-    text = ''
-      PATH=${scala_2_11}/bin:${coreutils}/bin
-      DEPS_CLASSPATH=$(cat ${coursier-jars}/classpath)
-      LIB_CLASSPATH=${library}
-      FULL_CLASSPATH="$DEPS_CLASSPATH:$LIB_CLASSPATH"
-      echo "Running with $FULL_CLASSPATH"
-      set -x
-      scala -cp $FULL_CLASSPATH ${main-class} $@
-      set +x
-    '';
-    executable = true;
-    destination = "/bin/run";
+    topLevelLibrary = library;
+    mainClass = "sediment.common.WorldLoader";
   };
 }

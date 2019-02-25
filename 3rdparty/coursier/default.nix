@@ -6,9 +6,9 @@ let
 
   dependencies = [
     {
-      org = "org.world-engine";
-      name = "worldengine-java";
-      rev = "1.0"; # think about latest
+      org = "com.google.protobuf";
+      name = "protobuf-java";
+      rev = "3.5.1";
     }
   ];
 
@@ -26,7 +26,10 @@ in stdenv.mkDerivation {
     export CACHE="$out/coursier-cache"
     export CLASSPATH="$out/classpath"
     mkdir -p $CACHE
+    set -x
+    coursier resolve --cache $CACHE ${coursierArgs}
     coursier fetch --cache $CACHE ${coursierArgs} --classpath > $CLASSPATH
+    set +x
     cat $CLASSPATH
   '';
 }

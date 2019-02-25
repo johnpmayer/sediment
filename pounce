@@ -41,7 +41,7 @@ run)
   shift
   echo "Building '$target' run-script"
   store_file=$(do-build $target run-script)
-  $store_file/bin/run $@
+  $store_file $@
   ;; 
 
 *)

@@ -58,10 +58,10 @@ in {
       DEPS_CLASSPATH=$(cat ${coursier-jars}/classpath)
       LIB_CLASSPATH=${topLevelLibrary}
       FULL_CLASSPATH="$DEPS_CLASSPATH:$LIB_CLASSPATH"
+      
       echo "Running with $FULL_CLASSPATH"
-      set -x
+      
       scala -cp $FULL_CLASSPATH ${mainClass} $@
-      set +x
     '';
     executable = true;
   };

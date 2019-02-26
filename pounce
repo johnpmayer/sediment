@@ -45,7 +45,7 @@ run)
   ;; 
 
 *)
-  >&2 "Unknownn command '$target'"
+  >&2 "Unknownn command '$opcode'"
   exit 1
   ;;
 

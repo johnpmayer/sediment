@@ -1,11 +1,8 @@
 
 with (import <nixpkgs>{});
 with import ../project/pounce;
-with lib.sources;
 
-let 
-  coursier-jars = import ../3rdparty/coursier;
-in rec {
+rec {
 
   protoSource = fetchurl {
     url = "https://raw.githubusercontent.com/Mindwerks/worldengine/v0.19.0/worldengine/World.proto";

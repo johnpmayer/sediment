@@ -1,12 +1,13 @@
 
 with (import <nixpkgs>{});
 with lib.sources;
+with lib.strings;
 
 let 
   coursier-jars = import ../../3rdparty/coursier;
 in {
 
-  javaLibrary = { name, javaRoot}: stdenv.mkDerivation {
+  javaLibrary = { name, javaRoot }: stdenv.mkDerivation {
     name = name;
     src = javaRoot;
     buildInputs = [ coreutils findutils openjdk8 ];
@@ -20,13 +21,13 @@ in {
 
       mkdir $out
       
-      set -x
       javac -classpath $CLASSPATH -d $out $FILES
-      set +x
     '';
   };
 
-  scalaLibrary = { name, scalaRoot }: stdenv.mkDerivation {
+  scalaLibrary = { name, scalaRoot, dependencies ? [] }: let
+    depsClasspath = concatStringsSep ":" dependencies;
+  in stdenv.mkDerivation {
     name = name;
     src = scalaRoot;
     buildInputs = [ coreutils findutils scala_2_11 ];
@@ -38,11 +39,15 @@ in {
       CLASSPATH=$(cat ${coursier-jars}/classpath)
       echo "Coursier classpath: $CLASSPATH"
 
+      DEPS_CLASSPATH=${depsClasspath}
+      echo "Dependencies classpath: $DEPS_CLASSPATH"
+
+      FULL_CLASSPATH=$CLASSPATH:$DEPS_CLASSPATH
+      echo "Full classpath: $FULL_CLASSPATH"
+
       mkdir $out
       
-      set -x
-      scalac -classpath $CLASSPATH -d $out $FILES
-      set +x
+      scalac -classpath $FULL_CLASSPATH -d $out $FILES
     '';
   };
 

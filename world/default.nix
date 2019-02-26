@@ -4,14 +4,12 @@ with import ../project/pounce;
 
 rec {
 
-  protoSource = fetchurl {
-    url = "https://raw.githubusercontent.com/Mindwerks/worldengine/v0.19.0/worldengine/World.proto";
-    sha256 = "0h02md7w35b7rwm54hz03r4lnjl6xa705y30hfm2al95y09vkbxm";
-  };
-
   generatedSources = stdenv.mkDerivation {
-    name = "world-generated-sources";
-    src = protoSource;
+    name = "world-gen";
+    src = fetchurl {
+      url = "https://raw.githubusercontent.com/Mindwerks/worldengine/v0.19.0/worldengine/World.proto";
+      sha256 = "0h02md7w35b7rwm54hz03r4lnjl6xa705y30hfm2al95y09vkbxm";
+    };
     buildInputs = [ protobuf3_5 ];
     buildCommand = ''
       mkdir path_dir

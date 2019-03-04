@@ -4,13 +4,16 @@ with lib.sources;
 with lib.strings;
 
 let 
-  coursier-jars = import ../../3rdparty/coursier;
-in {
+  coursier-jars = (import ../../3rdparty/coursier).library;
+in rec {
+
+  scala_version = scala_2_12;
+  java_version = openjdk8;
 
   javaLibrary = { name, javaRoot }: stdenv.mkDerivation {
     name = name;
     src = javaRoot;
-    buildInputs = [ coreutils findutils openjdk8 ];
+    buildInputs = [ coreutils findutils java_version ];
     buildCommand = ''
       cp -r $src/* .
       FILES=$(find . -type f -name '*.java')
@@ -30,7 +33,7 @@ in {
   in stdenv.mkDerivation {
     name = name;
     src = scalaRoot;
-    buildInputs = [ coreutils findutils scala_2_11 ];
+    buildInputs = [ coreutils findutils scala_version ];
     buildCommand = ''
       cp -r $src/* .
       FILES=$(find . -type f -name '*.scala')
@@ -54,7 +57,7 @@ in {
   scalaRunner = { name, topLevelLibrary, mainClass }: pkgs.writeTextFile { 
     name = name;
     text = ''
-      PATH=${scala_2_11}/bin:${coreutils}/bin
+      PATH=${scala_version}/bin:${coreutils}/bin
       DEPS_CLASSPATH=$(cat ${coursier-jars}/classpath)
       LIB_CLASSPATH=${topLevelLibrary}
       FULL_CLASSPATH="$DEPS_CLASSPATH:$LIB_CLASSPATH"

@@ -62,7 +62,10 @@ in rec {
       LIB_CLASSPATH=${topLevelLibrary}
       FULL_CLASSPATH="$DEPS_CLASSPATH:$LIB_CLASSPATH"
       
-      echo "Running with $FULL_CLASSPATH"
+      if [ "$${POUNCE_VERBOSE:-}" = "true" ]
+      then
+        echo "Running with $FULL_CLASSPATH"
+      fi
       
       scala -cp $FULL_CLASSPATH ${mainClass} $@
     '';

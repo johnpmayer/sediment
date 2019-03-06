@@ -2,10 +2,24 @@
 
 # Build Command #
 
+function gecko {
+  if [ "${POUNCE_VERBOSE:-}" = "true" ]
+  then
+    echo $@
+  fi
+  return 0
+}
+
 function do-build {
   local nix_file=$1
   local nix_variable=$2
-  build_output=$(nix-build --fallback --no-out-link $target -A $nix_variable)
+  if [ "${POUNCE_VERBOSE:-}" = "true" ]
+  then
+    SUPPRESS_NIX=""
+  else
+    SUPPRESS_NIX=""
+  fi
+  build_output=$(nix-build --quiet --fallback --no-out-link $target -A $nix_variable)
   build_status=$?
   if [ $build_status -eq 0 ]
   then
@@ -19,7 +33,7 @@ function do-build {
 
 # MAIN #
 
-set -eu
+# set -eu
 
 opcode=$1
 shift
@@ -27,19 +41,19 @@ shift
 case $opcode in
 
 build)
-  echo "Building"
+  gecko "Building"
   target=$1
   shift
-  echo "Building '$target' library"
+  gecko "Building '$target' library"
   store_file=$(do-build $target library)
-  echo "Built target in '$store_file'"
+  gecko "Built target in '$store_file'"
   ;;
 
 run)
-  echo "Building"
+  gecko "Building"
   target=$1
   shift
-  echo "Building '$target' run-script"
+  gecko "Building '$target' run-script"
   store_file=$(do-build $target run-script)
   $store_file $@
   ;; 

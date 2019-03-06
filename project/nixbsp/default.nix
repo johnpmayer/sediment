@@ -4,13 +4,15 @@ with import ../pounce;
 
 rec {
   library = scalaLibrary {
-    name = "ensime-gen-lib";
+    name = "library";
     scalaRoot = ./src/main/scala;
+    dependencies = [
+    ];
   };
 
   run-script = scalaRunner {
-    name = "ensime-gen";
+    name = "run-script";
     topLevelLibrary = library;
-    mainClass = "sediment.project.ensime.EnsimeGenerator";
+    mainClass = "sediment.project.nixbsp.NixBsp";
   };
 }

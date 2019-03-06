@@ -12,9 +12,9 @@ let
     }
 
     {
-      org = "org.ensime";
-      name = "api_2.12";
-      rev = "2.0.2";
+      org = "ch.epfl.scala";
+      name = "bsp4s_2.12";
+      rev = "2.0.0-M3";
     }
   ];
 

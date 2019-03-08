@@ -1,0 +1,5 @@
+dependencies:
+  com.google.protobuf:
+    protobuf-java:
+      version: "3.5.1"
+      lang: java

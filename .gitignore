@@ -1,2 +1,8 @@
 /tmp
 /target
+
+/bazel-bin
+/bazel-genfiles
+/bazel-out
+/bazel-sediment
+/bazel-testlogs

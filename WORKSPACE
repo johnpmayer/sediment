@@ -1,7 +1,22 @@
 
-load("//3rdparty:workspace.bzl", "maven_dependencies")
+# Section: Bazel Deps for 3rdparty jvm dependencies
 
+load("//3rdparty:workspace.bzl", "maven_dependencies")
 maven_dependencies()
+
+# Section: Protocol Buffers toolchain
+
+# proto_library, cc_proto_library, and java_proto_library rules implicitly
+# depend on @com_google_protobuf for protoc and proto runtimes.
+# This statement defines the @com_google_protobuf repo.
+http_archive(
+    name = "com_google_protobuf",
+    sha256 = "cef7f1b5a7c5fba672bec2a319246e8feba471f04dcebfe362d55930ee7c1c30",
+    strip_prefix = "protobuf-3.5.0",
+    urls = ["https://github.com/google/protobuf/archive/v3.5.0.zip"],
+    )
+
+# Section: Scala toolchain
 
 rules_scala_version="a89d44f7ef67d93dedfc9888630f48d7723516f7" # update this as needed
 

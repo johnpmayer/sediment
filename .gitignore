@@ -6,3 +6,5 @@
 /bazel-out
 /bazel-sediment
 /bazel-testlogs
+
+/.ijwb
